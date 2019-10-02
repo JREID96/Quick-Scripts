@@ -1,0 +1,17 @@
+This script fixes the issue with the lab Temperature probes where they must be disabled and re-enabled in order to function. Run via PDQ Deploy on a daily schedule.
+Version 1.0.0 - Initial Release
+Jarred Reid - 2019
+
+function Reset-ErrorDevice
+{
+    try{
+        $ErrorDevice = Get-PnpDevice -PresentOnly -Status ERROR -ErrorAction SilentlyContinue | select-Object -ExpandProperty FriendlyName
+        Get-PnpDevice | Where-Object {$_.FriendlyName -like $ErrorDevice} | Disable-PnpDevice -Confirm:$false
+        Get-PnpDevice | Where-Object {$_.FriendlyName -like $ErrorDevice} | Enable-PnpDevice -Confirm:$false
+    }
+    catch{
+        Write-Output 'No devices are currently in an error state.'
+    }
+}
+
+Reset-ErrorDevice
