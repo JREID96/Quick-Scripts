@@ -1,0 +1,5 @@
+function Get-MFAStatus{
+    $UPN = Read-Host -prompt "Enter an email address"
+    $user = Get-MsolUser -SearchString $UPN
+    $user.StrongAuthenticationRequirements.state
+}
