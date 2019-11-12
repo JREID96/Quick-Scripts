@@ -1,5 +1,10 @@
 function Get-MFAStatus{
-    $UPN = Read-Host -Prompt "Enter an alias/email"
+
+	param(
+	[Parameter(Mandatory=$true, HelpMessage="Enter a UPN/alias")]
+	[String]$UPN
+	)
+	
     $user = Get-MsolUser -SearchString $UPN
     $mfastatus = $user.StrongAuthenticationRequirements.state
 
