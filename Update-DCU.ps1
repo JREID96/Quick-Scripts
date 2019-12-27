@@ -4,16 +4,14 @@ Jarred Reid - 2019
 
 Changelog:
 1.0.0 - Initial release
-1.0.1 - Fixed a bug where users would be notified about updates.
-
-
+1.0.1 - Fixed a bug where users would be notified about updates
 #>
 
 
 ### Get DCU Variable
 $DCU = Get-WmiObject -Class win32_Product | Where-Object {$_.Name -match "Dell Command | Update"}
 
-if($DCU.version -eq "2.4.0", "3.0.1"){
+if($DCU.version -eq "2.4.0" -or "3.0.1"){
 
 <# 
     Write-Output "Older version found. Beginning uninstall process..."
@@ -77,7 +75,7 @@ if($DCU.Version -eq "3.1.0"){
     break
 }
 
-elseif($DCU -ne "3.1.0","2.4.0","3.0.1"){
+elseif($DCU -ne "3.1.0" -or "2.4.0" -or "3.0.1"){
     Write-Output "Dell Command Update not installed."
     break
 }
