@@ -1,17 +1,21 @@
-<# Update-DCU
+<# 
+
+Update-DCU
 Update DCU client from 2.4.0 to 3.1.0
 Jarred Reid - 2019
 
 Changelog:
 1.0.0 - Initial release
 1.0.1 - Fixed a bug where users would be notified about updates
+1.0.2 - Removed using Win32_Product, opting for Get-Package instead. 
+Read why here: (https://docs.microsoft.com/en-us/powershell/scripting/samples/working-with-software-installations?view=powershell-6)
+
 #>
 
-
 ### Get DCU Variable
-$DCU = Get-WmiObject -Class win32_Product | Where-Object {$_.Name -match "Dell Command | Update"}
+$DCU = Get-Package | Where-Object {$_.Name -eq "Dell Command | Update"}
 
-if($DCU.version -eq "2.4.0" -or "3.0.1"){
+if($DCU.Version -eq "2.4.0" -or $DCU.Version -eq "3.0.1"){
 
 <# 
     Write-Output "Older version found. Beginning uninstall process..."
@@ -75,7 +79,7 @@ if($DCU.Version -eq "3.1.0"){
     break
 }
 
-elseif($DCU -ne "3.1.0" -or "2.4.0" -or "3.0.1"){
+elseif($DCU.Version -eq $null){
     Write-Output "Dell Command Update not installed."
     break
 }
