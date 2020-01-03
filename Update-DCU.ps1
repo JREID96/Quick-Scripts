@@ -7,13 +7,15 @@ Jarred Reid - 2019
 Changelog:
 1.0.0 - Initial release
 1.0.1 - Fixed a bug where users would be notified about updates
-1.0.2 - Removed using Win32_Product, opting for Get-Package instead. 
+1.0.2 - Removed using Win32_Product, opting for Get-Package instead.
 Read why here: (https://docs.microsoft.com/en-us/powershell/scripting/samples/working-with-software-installations?view=powershell-6)
+1.0.3 - Fixed operands for $DCU variable
+
 
 #>
 
 ### Get DCU Variable
-$DCU = Get-Package | Where-Object {$_.Name -eq "Dell Command | Update"}
+$DCU = Get-Package | Where-Object {$_.Name -like "Dell Command | Update*"}
 
 if($DCU.Version -eq "2.4.0" -or $DCU.Version -eq "3.0.1"){
 
@@ -52,7 +54,7 @@ if($DCU.Version -eq "2.4.0" -or $DCU.Version -eq "3.0.1"){
         $installDCU.WaitForExit()
         
         ### Check if DCU.version matches string "3.1.0" before printing success message
-        $DCU = Get-WmiObject -Class win32_Product | Where-Object{$_.Name -match "Dell Command | Update"}
+        $DCU = Get-Package | Where-Object {$_.Name -like "Dell Command | Update*"}
         if($DCU.version -eq "3.1.0"){
         Write-Output "Installation successful!"
         
@@ -79,7 +81,7 @@ if($DCU.Version -eq "3.1.0"){
     break
 }
 
-elseif($DCU.Version -eq $null){
+if($DCU.Version -eq $null){
     Write-Output "Dell Command Update not installed."
     break
 }
